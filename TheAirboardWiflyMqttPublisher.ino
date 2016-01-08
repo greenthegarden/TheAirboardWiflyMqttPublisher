@@ -100,6 +100,14 @@ void publish_battery()
   mqtt_client.publish(prog_buffer, buf);
 }
 
+void publish_status()
+{
+  publish_connected();
+  publish_uptime();
+  publish_memory();
+  publish_battery();
+}
+
 byte mqtt_connect()
 {
   if (!wifly_connected)
@@ -109,11 +117,7 @@ byte mqtt_connect()
     DEBUG_LOG(1, "connecting to broker");
     if (mqtt_client.connect(mqtt_client_id)) {
       DEBUG_LOG(1, "  connected");
-      publish_connected();
-#if USE_FREEMEM
-      publish_memory();
-#endif
-      publish_battery();
+      publish_status();
       return true;
     } else {
       DEBUG_LOG(1, "  failed");
@@ -123,14 +127,6 @@ byte mqtt_connect()
     return false;
   }
   return false;
-}
-
-void publish_measurements()
-{
-  if (mqtt_connect()) {
-    takeMeasurement();
-    mqtt_client.disconnect();
-  }
 }
 
 
@@ -193,44 +189,7 @@ byte dht22_measurement()
 
   return chk;
 }
-#endif
 
-void takeMeasurement(void)
-{
-  // publish measurement start topic
-  prog_buffer[0] = '\0';
-  strcpy_P(prog_buffer, (char*)pgm_read_word(&(MEASUREMENT_TOPICS[0])));
-  mqtt_client.publish(prog_buffer, "");
-
-#if SENSOR_DHT22
-  // take measurement as sensor cannot be be sampled at short intervals
-  if (dht22_measurement() == DHTLIB_OK) {
-    // value is stored in DHT object
-    dht22_measurement_ok = true;
-  }
-
-  publish_temperature_measurement();
-  publish_humidity_measurement();
-#endif
-
-  // publish measurement end topic with message
-  // message is number of measurements included
-
-  //  buf[0] = '\0';
-  //  itoa(measurement_count, buf, 10);
-
-  // publish measurement end topic
-  prog_buffer[0] = '\0';
-  strcpy_P(prog_buffer, (char*)pgm_read_word(&(MEASUREMENT_TOPICS[1])));
-  mqtt_client.publish(prog_buffer, "");
-
-#if SENSOR_DHT22
-  // reset measurements
-  dht22_measurement_ok = false;
-#endif
-}
-
-#if SENSOR_DHT22
 void publish_temperature_measurement()
 {
   if (dht22_measurement_ok) {
@@ -238,7 +197,7 @@ void publish_temperature_measurement()
     buf[0] = '\0';
     dtostrf(DHT.temperature, 1, FLOAT_DECIMAL_PLACES, buf);
     prog_buffer[0] = '\0';
-    strcpy_P(prog_buffer, (char*)pgm_read_word(&(MEASUREMENT_TOPICS[3])));
+    strcpy_P(prog_buffer, (char*)pgm_read_word(&(MEASUREMENT_TOPICS[2])));
     mqtt_client.publish(prog_buffer, buf);
   }
 }
@@ -250,11 +209,49 @@ void publish_humidity_measurement()
     buf[0] = '\0';
     dtostrf(DHT.humidity, 1, FLOAT_DECIMAL_PLACES, buf);
     prog_buffer[0] = '\0';
-    strcpy_P(prog_buffer, (char*)pgm_read_word(&(MEASUREMENT_TOPICS[4])));
+    strcpy_P(prog_buffer, (char*)pgm_read_word(&(MEASUREMENT_TOPICS[3])));
     mqtt_client.publish(prog_buffer, buf);
   }
 }
 #endif
+
+void publish_measurements()
+{
+  if (mqtt_connect()) {
+    // publish measurement start topic
+    prog_buffer[0] = '\0';
+    strcpy_P(prog_buffer, (char*)pgm_read_word(&(MEASUREMENT_TOPICS[0])));
+    mqtt_client.publish(prog_buffer, "");
+
+#if SENSOR_DHT22
+    // take measurement as sensor cannot be be sampled at short intervals
+    if (dht22_measurement() == DHTLIB_OK) {
+      // value is stored in DHT object
+      dht22_measurement_ok = true;
+    }
+
+    publish_temperature_measurement();
+    publish_humidity_measurement();
+#endif
+
+    // publish measurement end topic with message
+    // message is number of measurements included
+
+    //  buf[0] = '\0';
+    //  itoa(measurement_count, buf, 10);
+
+    // publish measurement end topic
+    prog_buffer[0] = '\0';
+    strcpy_P(prog_buffer, (char*)pgm_read_word(&(MEASUREMENT_TOPICS[1])));
+    mqtt_client.publish(prog_buffer, "");
+
+#if SENSOR_DHT22
+    // reset measurements
+    dht22_measurement_ok = false;
+#endif
+    mqtt_client.disconnect();
+  }
+}
 
 
 /*--------------------------------------------------------------------------------------
@@ -267,7 +264,7 @@ void setup()
   wifly_configure();
   if (mqtt_connect()) {
     mqtt_client.disconnect();
-  }  
+  }
 }
 
 

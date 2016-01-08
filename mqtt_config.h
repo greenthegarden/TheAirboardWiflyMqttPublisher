@@ -59,16 +59,14 @@ PGM_P const dht22_status_messages[]   PROGMEM = { status_ok,        // idx = 0
 
 const char MEASUREMENTS_START[]       PROGMEM = "theairboard/measurement/START";
 const char MEASUREMENTS_END[]         PROGMEM = "theairboard/measurement/END";
-const char AIRBOARD_BATTERY_TOPIC[]   PROGMEM = "theairboard/measurement/BATTERY";
 const char DHT22_temp_topic[]         PROGMEM = "theairboard/measurement/DHT22_temp";
 const char DHT22_humidity_topic[]     PROGMEM = "theairboard/measurement/DHT22_humidity";
 
 //tables to refer to strings
-PGM_P const MEASUREMENT_TOPICS[]       PROGMEM = { MEASUREMENTS_START,     // idx = 0
+PGM_P const MEASUREMENT_TOPICS[]      PROGMEM = { MEASUREMENTS_START,     // idx = 0
                                                   MEASUREMENTS_END,       // idx = 1
-                                                  AIRBOARD_BATTERY_TOPIC, // idx = 2
-                                                  DHT22_temp_topic,       // idx = 3
-                                                  DHT22_humidity_topic,   // idx = 4
+                                                  DHT22_temp_topic,       // idx = 2
+                                                  DHT22_humidity_topic,   // idx = 3
                                                 };
 
 
