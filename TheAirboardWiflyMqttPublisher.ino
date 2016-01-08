@@ -66,9 +66,41 @@ void callback(char* topic,
 
 PubSubClient   mqtt_client(mqtt_server_addr, MQTT_PORT, callback, wifly_client);
 
+void publish_connected()
+{
+  prog_buffer[0] = '\0';
+  strcpy_P(prog_buffer, (char*)pgm_read_word(&(STATUS_TOPICS[0])));
+  mqtt_client.publish(prog_buffer, "");
+}
 
+void publish_uptime()
+{
+  prog_buffer[0] = '\0';
+  strcpy_P(prog_buffer, (char*)pgm_read_word(&(STATUS_TOPICS[1])));
+  char_buffer[0] = '\0';
+  ltoa(millis(), char_buffer, 10);
+  mqtt_client.publish(prog_buffer, char_buffer);
+}
 
-void mqtt_connect()
+void publish_memory()
+{
+  prog_buffer[0] = '\0';
+  strcpy_P(prog_buffer, (char*)pgm_read_word(&(STATUS_TOPICS[2])));
+  char_buffer[0] = '\0';
+  itoa(freeMemory(), char_buffer, 10);
+  mqtt_client.publish(prog_buffer, char_buffer);
+}
+
+void publish_battery()
+{
+  buf[0] = '\0';
+  dtostrf(board.batteryChk(), 1, FLOAT_DECIMAL_PLACES, buf);
+  prog_buffer[0] = '\0';
+  strcpy_P(prog_buffer, (char*)pgm_read_word(&(STATUS_TOPICS[2])));
+  mqtt_client.publish(prog_buffer, buf);
+}
+
+byte mqtt_connect()
 {
   if (!wifly_connected)
     wifly_connect();
@@ -81,67 +113,23 @@ void mqtt_connect()
 #if USE_FREEMEM
       publish_memory();
 #endif
+      publish_battery();
+      return true;
     } else {
       DEBUG_LOG(1, "  failed");
       delay(AFTER_ERROR_DELAY);
+      return false;
     }
+    return false;
   }
-}
-
-void reset_connection()
-{
-  if (mqtt_client.connected())
-    mqtt_client.disconnect();
-  wifly_connect();
-  mqtt_connect();
-}
-
-void publish_connected()
-{
-  prog_buffer[0] = '\0';
-  strcpy_P(prog_buffer, (char*)pgm_read_word(&(STATUS_TOPICS[0])));
-  mqtt_client.publish(prog_buffer, "connected");
-}
-
-void publish_uptime()
-{
-  prog_buffer[0] = '\0';
-  strcpy_P(prog_buffer, (char*)pgm_read_word(&(STATUS_TOPICS[1])));
-  char_buffer[0] = '\0';
-  ltoa(millis(), char_buffer, 10);
-  mqtt_client.publish(prog_buffer, char_buffer);
-
-}
-void publish_memory()
-{
-  prog_buffer[0] = '\0';
-  strcpy_P(prog_buffer, (char*)pgm_read_word(&(STATUS_TOPICS[2])));
-  char_buffer[0] = '\0';
-  itoa(freeMemory(), char_buffer, 10);
-  mqtt_client.publish(prog_buffer, char_buffer);
+  return false;
 }
 
 void publish_measurements()
 {
-  if (!wifly_connected)
-    wifly_connect();
-
-  if (wifly_connected) {
-    // MQTT client setup
-    //    mqttClient.disconnect();
-    DEBUG_LOG(1, "connecting to broker");
-    if (mqtt_client.connect(mqtt_client_id)) {
-      DEBUG_LOG(1, "  connected");
-      prog_buffer[0] = '\0';
-      strcpy_P(prog_buffer, (char*)pgm_read_word(&(STATUS_TOPICS[0])));
-      char_buffer[0] = '\0';
-      strcpy_P(char_buffer, (char*)pgm_read_word(&(MQTT_STATUS_MESSAGES[0])));
-      mqtt_client.publish(prog_buffer, char_buffer);
-
-      takeMeasurement();
-
-      mqtt_client.disconnect();
-    }
+  if (mqtt_connect()) {
+    takeMeasurement();
+    mqtt_client.disconnect();
   }
 }
 
@@ -214,8 +202,6 @@ void takeMeasurement(void)
   strcpy_P(prog_buffer, (char*)pgm_read_word(&(MEASUREMENT_TOPICS[0])));
   mqtt_client.publish(prog_buffer, "");
 
-  theairboard_battery_measurement();
-
 #if SENSOR_DHT22
   // take measurement as sensor cannot be be sampled at short intervals
   if (dht22_measurement() == DHTLIB_OK) {
@@ -223,8 +209,8 @@ void takeMeasurement(void)
     dht22_measurement_ok = true;
   }
 
-  temperature_measurement();
-  humidity_measurement();
+  publish_temperature_measurement();
+  publish_humidity_measurement();
 #endif
 
   // publish measurement end topic with message
@@ -244,17 +230,8 @@ void takeMeasurement(void)
 #endif
 }
 
-void theairboard_battery_measurement()
-{
-  buf[0] = '\0';
-  dtostrf(board.batteryChk(), 1, FLOAT_DECIMAL_PLACES, buf);
-  prog_buffer[0] = '\0';
-  strcpy_P(prog_buffer, (char*)pgm_read_word(&(MEASUREMENT_TOPICS[2])));
-  mqtt_client.publish(prog_buffer, buf);
-}
-
 #if SENSOR_DHT22
-void temperature_measurement()
+void publish_temperature_measurement()
 {
   if (dht22_measurement_ok) {
     // value is stored in DHT object
@@ -266,7 +243,7 @@ void temperature_measurement()
   }
 }
 
-void humidity_measurement()
+void publish_humidity_measurement()
 {
   if (dht22_measurement_ok) {
     // value is stored in DHT object
@@ -287,6 +264,10 @@ void humidity_measurement()
 void setup()
 {
   Serial.begin(BAUD_RATE);
+  wifly_configure();
+  if (mqtt_connect()) {
+    mqtt_client.disconnect();
+  }  
 }
 
 

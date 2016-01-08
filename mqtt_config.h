@@ -23,7 +23,7 @@ char message[BUFFER_SIZE];
 // MQTT topic definitions
 
 // status topics
-const char CONNECTION_STATUS[] PROGMEM = "theairboard/status/connection";
+const char CONNECTION_STATUS[] PROGMEM = "theairboard/status/connected";
 const char UPTIME_STATUS[]     PROGMEM = "theairboard/status/uptime";
 const char MEMORY_STATUS[]     PROGMEM = "theairboard/status/memory";
 const char BATTERY_STATUS[]    PROGMEM = "theairboard/status/battery";
@@ -36,13 +36,6 @@ PGM_P const STATUS_TOPICS[]    PROGMEM = {CONNECTION_STATUS,// idx = 0
                                           DHT22_STATUS      // idx = 4
                                           };
 
-
-
-// MQTT status messages
-const char MQTT_CONNECTED[]          PROGMEM = "Connected";
-
-PGM_P const MQTT_STATUS_MESSAGES[]   PROGMEM = { MQTT_CONNECTED,   // idx = 0
-                                               };
 
 // DHT22 status messages
 const char status_ok[]                PROGMEM = "DHT22: OK";
