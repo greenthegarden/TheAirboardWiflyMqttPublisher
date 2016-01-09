@@ -14,7 +14,7 @@
 
 
 #ifndef DEBUG_LEVEL
-#define DEBUG_LEVEL 3
+#define DEBUG_LEVEL 0
 #endif
 
 // set DEBUG_LEVEL to 0 if using TheAirboard as no serial output

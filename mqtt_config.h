@@ -36,31 +36,12 @@ PGM_P const STATUS_TOPICS[]    PROGMEM = {CONNECTION_STATUS,// idx = 0
                                           DHT22_STATUS      // idx = 4
                                           };
 
-
-// DHT22 status messages
-const char status_ok[]                PROGMEM = "DHT22: OK";
-const char checksum_error[]           PROGMEM = "DHT22: Checksum error";
-const char timeout_error[]            PROGMEM = "DHT22: Time out error";
-const char connect_error[]            PROGMEM = "DHT22: Connect error";
-const char ack_low_error[]            PROGMEM = "DHT22: Ack Low error";
-const char ack_high_error[]           PROGMEM = "DHT22: Ack High error";
-const char unknown_error[]            PROGMEM = "DHT22: Unknown error";
-
-PGM_P const dht22_status_messages[]   PROGMEM = { status_ok,        // idx = 0
-                                                  checksum_error,   // idx = 1
-                                                  timeout_error,    // idx = 2
-                                                  connect_error,    // idx = 3
-                                                  ack_low_error,    // idx = 4
-                                                  ack_high_error,   // idx = 5
-                                                  unknown_error,    // idx = 6
-                                                };
-
 // measurement topics
 
 const char MEASUREMENTS_START[]       PROGMEM = "theairboard/measurement/START";
 const char MEASUREMENTS_END[]         PROGMEM = "theairboard/measurement/END";
-const char DHT22_temp_topic[]         PROGMEM = "theairboard/measurement/DHT22_temp";
-const char DHT22_humidity_topic[]     PROGMEM = "theairboard/measurement/DHT22_humidity";
+const char DHT22_temp_topic[]         PROGMEM = "theairboard/measurement/DHT22_T";
+const char DHT22_humidity_topic[]     PROGMEM = "theairboard/measurement/DHT22_H";
 
 //tables to refer to strings
 PGM_P const MEASUREMENT_TOPICS[]      PROGMEM = { MEASUREMENTS_START,     // idx = 0

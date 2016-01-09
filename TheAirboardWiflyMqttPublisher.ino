@@ -1,20 +1,6 @@
 #include "config.h"
 
 
-// WiFly libraries
-#include <SPI.h>
-#include <WiFly.h>
-
-
-#include <MemoryFree.h>
-
-
-#if ENABLE_THEAIRBOARD_SUPPORT
-#include <TheAirBoard.h>
-
-TheAirBoard board;
-#endif
-
 
 // character buffer to support conversion of floats to char
 char buf[12];
@@ -143,6 +129,7 @@ byte mqtt_connect()
 
 void publish_measurements()
 {
+  DEBUG_LOG(1, "Publishing measurements");
   if (mqtt_connect()) {
     // publish measurement start topic
     prog_buffer[0] = '\0';
@@ -151,13 +138,14 @@ void publish_measurements()
 
 #if ENABLE_SENSOR_DHT22
     // take measurement as sensor cannot be be sampled at short intervals
-    if (dht22_measurement() == DHTLIB_OK) {
-      // value is stored in DHT object
-      dht22_measurement_ok = true;
-    }
-
-    publish_temperature_measurement();
-    publish_humidity_measurement();
+    dht22_measurement();
+//    if (dht22_measurement() == DHTLIB_OK) {
+//      // value is stored in DHT object
+//      dht22_measurement_ok = true;
+//
+//      publish_temperature_measurement();
+//      publish_humidity_measurement();
+//    }
 #endif
 
     // publish measurement end topic with message
@@ -173,7 +161,7 @@ void publish_measurements()
 
 #if ENABLE_SENSOR_DHT22
     // reset measurements
-    dht22_measurement_ok = false;
+    //dht22_measurement_ok = false;
 #endif
     mqtt_client.disconnect();
   }
@@ -192,9 +180,10 @@ void setup()
 #else
   wifly_configure();
 #endif
-  if (mqtt_connect()) {
-    mqtt_client.disconnect();
-  }
+  publish_measurements();
+//  if (mqtt_connect()) {
+//    mqtt_client.disconnect();
+//  }
 }
 
 

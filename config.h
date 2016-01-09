@@ -12,32 +12,29 @@
 #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
 
 
+// Program GLobal Constants
 const int AFTER_ERROR_DELAY       = 1000;
-
-
-// Serial parameters
 const int BAUD_RATE               = 9600;
-
-
-// Network configuration
-#include "networkConfig.h"
-
-
-// WiFly configuration
-#include "wifly_config.h"
-
-
-// MQTT configuration
-#include "mqtt_config.h"
-
-// Define sensors
-#define ENABLE_SENSOR_DHT22 false
-
-
-// program constants
-
 const byte FLOAT_DECIMAL_PLACES   = 1;
 const unsigned long MEASUREMENT_INTERVAL = 300000UL;    // 5 minutes = 5 * 60 * 1000 miliiseconds
+
+
+// External libraries
+#if ENABLE_THEAIRBOARD_SUPPORT
+#include <TheAirBoard.h>
+TheAirBoard board;
+#endif
+#include <MemoryFree.h>
+
+
+// Internal headers
+#include "networkConfig.h"  // Network configuration
+#include "wifly_config.h"   // WiFly configuration
+#include "mqtt_config.h"    // MQTT configuration
+
+
+// Define sensors
+#define ENABLE_SENSOR_DHT22 true
 
 
 #endif  /* THEAIRBOARDWIFLYMQTTPUBLISHER_CONFIG_H_ */
