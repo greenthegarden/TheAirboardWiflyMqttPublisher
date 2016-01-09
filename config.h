@@ -8,21 +8,17 @@
 #include "Debug.h"
 
 
-// Macros
-#define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
-
-
-// Program GLobal Constants
+// GLobal Constants
 const int AFTER_ERROR_DELAY       = 1000;
 const int BAUD_RATE               = 9600;
 const byte FLOAT_DECIMAL_PLACES   = 1;
 const unsigned long MEASUREMENT_INTERVAL = 300000UL;    // 5 minutes = 5 * 60 * 1000 miliiseconds
 
-// character buffer to support conversion of floats to char
-char buf[12];
-
 // global variable definitions
 unsigned long previousMeasurementMillis = 0;
+
+// character buffer to support conversion of floats to char
+char buf[12];
 
 
 // External libraries
@@ -41,6 +37,7 @@ TheAirBoard board;
 
 // Define sensors
 #define ENABLE_SENSOR_DHT22 true
+#include "sensors_config.h"
 
 
 #endif  /* THEAIRBOARDWIFLYMQTTPUBLISHER_CONFIG_H_ */
