@@ -2,11 +2,10 @@
 #define THEAIRBOARDWIFLYMQTTPUBLISHER_CONFIG_H_
 
 
-#define DEBUG                       true
+#define ENABLE_THEAIRBOARD_SUPPORT  true
 
-#if DEBUG
+
 #include "Debug.h"
-#endif
 
 
 // Macros
@@ -30,6 +29,9 @@ const int BAUD_RATE               = 9600;
 
 // MQTT configuration
 #include "mqtt_config.h"
+
+// Define sensors
+#define ENABLE_SENSOR_DHT22 false
 
 
 // program constants

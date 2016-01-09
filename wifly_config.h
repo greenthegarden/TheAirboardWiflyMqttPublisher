@@ -34,21 +34,34 @@
 #define THEAIRBOARDWIFLYMQTTPUBLISHER_WIFLY_CONFIG_H_
 
 
-#include <SoftwareSerial.h>
-
-const byte WIFLY_SERIAL_RX        = 0;
-const byte WIFLY_SERIAL_TX        = 1;
-
-SoftwareSerial wifly_serial(WIFLY_SERIAL_RX, WIFLY_SERIAL_TX);
-
-
 #include <SPI.h>
 #include <WiFly.h>
 
 WiFlyClient    wifly_client;
 
-
 boolean wifly_connected           = false;
+
+
+#if ENABLE_THEAIRBOARD_SUPPORT
+#define RX 0                      // digital I/O pin for the TheAirboard UART serial receive
+#define TX 1                      // digital I/O pin for the TheAirboard UART serial receive port
+const byte UART_RX        = RX;   // TheAirboard UART serial receive (RX) port connected to TX of WiFly
+const byte UART_TX        = TX;   // TheAirboard UART serial transmit (TX) port connected to TX of WiFly
+#else
+const byte UART_RX        = 11;
+const byte UART_TX        = 12;
+
+
+#include <SoftwareSerial.h>
+
+SoftwareSerial wifly_serial(UART_RX, UART_TX);
+void wifly_configure()
+{
+  // Configure WiFly
+  wifly_serial.begin(BAUD_RATE);
+  WiFly.setUart(&wifly_serial);
+}
+#endif
 
 
 #endif  /* THEAIRBOARDWIFLYMQTTPUBLISHER_WIFLY_CONFIG_H_ */
