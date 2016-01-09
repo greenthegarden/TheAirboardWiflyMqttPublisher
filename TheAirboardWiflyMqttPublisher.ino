@@ -1,47 +1,5 @@
 #include "config.h"
 
-
-
-// character buffer to support conversion of floats to char
-char buf[12];
-
-// global variable definitions
-unsigned long previousMeasurementMillis = 0;
-
-// function declarations
-void takeMeasurement();
-
-
-// WiFly setup and connection routines
-
-//void wifly_configure()
-//{
-//  // Configure WiFly
-//  wifly_serial.begin(BAUD_RATE);
-//  WiFly.setUart(&wifly_serial);
-//}
-
-void wifly_connect()
-{
-  DEBUG_LOG(1, "initialising wifly");
-
-  WiFly.begin();
-  delay(5000);  // allow time to WiFly to initialise
-
-  DEBUG_LOG(1, "joining network");
-
-  //  if (!WiFly.join(MY_SSID, MY_PASSPHRASE, mode)) {
-  if (!WiFly.join(MY_SSID)) {   // needs to be fixed to allow a passphrase if secure
-    wifly_connected = false;
-    DEBUG_LOG(1, "  failed");
-    delay(AFTER_ERROR_DELAY);
-  } else {
-    wifly_connected = true;
-    DEBUG_LOG(1, "  connected");
-  }
-}
-
-
 // MQTT related routines
 
 #include <PubSubClient.h>
@@ -129,7 +87,7 @@ byte mqtt_connect()
 
 void publish_measurements()
 {
-  DEBUG_LOG(1, "Publishing measurements");
+  DEBUG_LOG(1, "publishing measurements");
   if (mqtt_connect()) {
     // publish measurement start topic
     prog_buffer[0] = '\0';
@@ -137,15 +95,7 @@ void publish_measurements()
     mqtt_client.publish(prog_buffer, "");
 
 #if ENABLE_SENSOR_DHT22
-    // take measurement as sensor cannot be be sampled at short intervals
-    dht22_measurement();
-//    if (dht22_measurement() == DHTLIB_OK) {
-//      // value is stored in DHT object
-//      dht22_measurement_ok = true;
-//
-//      publish_temperature_measurement();
-//      publish_humidity_measurement();
-//    }
+    publish_dht22_measurement();
 #endif
 
     // publish measurement end topic with message
@@ -159,10 +109,6 @@ void publish_measurements()
     strcpy_P(prog_buffer, (char*)pgm_read_word(&(MEASUREMENT_TOPICS[1])));
     mqtt_client.publish(prog_buffer, "");
 
-#if ENABLE_SENSOR_DHT22
-    // reset measurements
-    //dht22_measurement_ok = false;
-#endif
     mqtt_client.disconnect();
   }
 }
@@ -175,15 +121,8 @@ void publish_measurements()
 void setup()
 {
   Serial.begin(BAUD_RATE);
-#if ENABLE_THEAIRBOARD_SUPPORT
-  WiFly.setUart(&Serial);
-#else
   wifly_configure();
-#endif
   publish_measurements();
-//  if (mqtt_connect()) {
-//    mqtt_client.disconnect();
-//  }
 }
 
 

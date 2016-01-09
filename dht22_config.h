@@ -7,8 +7,6 @@
 dht DHT;
 
 const int DHT22_PIN = 10;
-//byte dht22_measurement_ok = false;
-
 
 // DHT22 status messages
 const char status_ok[]                PROGMEM = "OK";
@@ -28,40 +26,31 @@ PGM_P const dht22_status_messages[]   PROGMEM = { status_ok,        // idx = 0
                                                   unknown_error,    // idx = 6
                                                 };
 
-
 void publish_temperature_measurement()
 {
   DEBUG_LOG(3, "DHT22 temperature measurement: ");
-//  if (dht22_measurement_ok) {
-    // value is stored in DHT object
-    DEBUG_LOG(3, DHT.temperature);
-    buf[0] = '\0';
-    dtostrf(DHT.temperature, 1, FLOAT_DECIMAL_PLACES, buf);
-    prog_buffer[0] = '\0';
-    strcpy_P(prog_buffer, (char*)pgm_read_word(&(MEASUREMENT_TOPICS[2])));
-    mqtt_client.publish(prog_buffer, buf);
-//  } else {
-//    DEBUG_LOG(3, "NaN");
-//  }
+  // value is stored in DHT object
+  DEBUG_LOG(3, DHT.temperature);
+  buf[0] = '\0';
+  dtostrf(DHT.temperature, 1, FLOAT_DECIMAL_PLACES, buf);
+  prog_buffer[0] = '\0';
+  strcpy_P(prog_buffer, (char*)pgm_read_word(&(MEASUREMENT_TOPICS[2])));
+  mqtt_client.publish(prog_buffer, buf);
 }
 
 void publish_humidity_measurement()
 {
   DEBUG_LOG(3, "DHT22 humidity measurement: ");
-//  if (dht22_measurement_ok) {
-    // value is stored in DHT object
-    DEBUG_LOG(3, DHT.humidity);
-    buf[0] = '\0';
-    dtostrf(DHT.humidity, 1, FLOAT_DECIMAL_PLACES, buf);
-    prog_buffer[0] = '\0';
-    strcpy_P(prog_buffer, (char*)pgm_read_word(&(MEASUREMENT_TOPICS[3])));
-    mqtt_client.publish(prog_buffer, buf);
-//  } else {
-//    DEBUG_LOG(3, "NaN");
-//  }
+  // value is stored in DHT object
+  DEBUG_LOG(3, DHT.humidity);
+  buf[0] = '\0';
+  dtostrf(DHT.humidity, 1, FLOAT_DECIMAL_PLACES, buf);
+  prog_buffer[0] = '\0';
+  strcpy_P(prog_buffer, (char*)pgm_read_word(&(MEASUREMENT_TOPICS[3])));
+  mqtt_client.publish(prog_buffer, buf);
 }
 
-void dht22_measurement()
+void publish_dht22_measurement()
 {
   // READ DATA
   int chk = DHT.read22(DHT22_PIN);
@@ -70,10 +59,10 @@ void dht22_measurement()
   DEBUG_LOG(3, "  value: ");
   DEBUG_LOG(3, chk);
   DEBUG_LOG(3, "  string: ");
-  
+
   prog_buffer[0] = '\0';
   strcpy_P(prog_buffer, (char*)pgm_read_word(&(STATUS_TOPICS[4])));
-  
+
   switch (chk) {
     case DHTLIB_OK :
       DEBUG_LOG(3, "OK");
@@ -113,14 +102,13 @@ void dht22_measurement()
       strcpy_P(char_buffer, (char*)pgm_read_word(&(dht22_status_messages[5])));
       mqtt_client.publish(prog_buffer, char_buffer);
       break;
-    default:
+    default :
       DEBUG_LOG(3, "Unknown error");
       char_buffer[0] = '\0';
       strcpy_P(char_buffer, (char*)pgm_read_word(&(dht22_status_messages[6])));
       mqtt_client.publish(prog_buffer, char_buffer);
       break;
   }
-//  return chk;
 }
 
 

@@ -39,29 +39,57 @@
 
 WiFlyClient    wifly_client;
 
-boolean wifly_connected           = false;
+boolean wifly_connected   = false;
 
 
 #if ENABLE_THEAIRBOARD_SUPPORT
+
 #define RX 0                      // digital I/O pin for the TheAirboard UART serial receive
 #define TX 1                      // digital I/O pin for the TheAirboard UART serial receive port
+
 const byte UART_RX        = RX;   // TheAirboard UART serial receive (RX) port connected to TX of WiFly
 const byte UART_TX        = TX;   // TheAirboard UART serial transmit (TX) port connected to TX of WiFly
+
+void wifly_configure()
+{
+  WiFly.setUart(&Serial);
+}
+
 #else
+
 const byte UART_RX        = 11;
 const byte UART_TX        = 12;
-
 
 #include <SoftwareSerial.h>
 
 SoftwareSerial wifly_serial(UART_RX, UART_TX);
+
 void wifly_configure()
 {
-  // Configure WiFly
   wifly_serial.begin(BAUD_RATE);
   WiFly.setUart(&wifly_serial);
 }
 #endif
+
+void wifly_connect()
+{
+  DEBUG_LOG(1, "initialising wifly");
+
+  WiFly.begin();
+  delay(5000);  // allow time to WiFly to initialise
+
+  DEBUG_LOG(1, "joining network");
+
+  //  if (!WiFly.join(MY_SSID, MY_PASSPHRASE, mode)) {
+  if (!WiFly.join(MY_SSID)) {   // needs to be fixed to allow a passphrase if secure
+    wifly_connected = false;
+    DEBUG_LOG(1, "  failed");
+    delay(AFTER_ERROR_DELAY);
+  } else {
+    wifly_connected = true;
+    DEBUG_LOG(1, "  connected");
+  }
+}
 
 
 #endif  /* THEAIRBOARDWIFLYMQTTPUBLISHER_WIFLY_CONFIG_H_ */

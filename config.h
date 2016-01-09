@@ -18,6 +18,12 @@ const int BAUD_RATE               = 9600;
 const byte FLOAT_DECIMAL_PLACES   = 1;
 const unsigned long MEASUREMENT_INTERVAL = 300000UL;    // 5 minutes = 5 * 60 * 1000 miliiseconds
 
+// character buffer to support conversion of floats to char
+char buf[12];
+
+// global variable definitions
+unsigned long previousMeasurementMillis = 0;
+
 
 // External libraries
 #if ENABLE_THEAIRBOARD_SUPPORT
