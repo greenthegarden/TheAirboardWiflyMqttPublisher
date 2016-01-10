@@ -9,4 +9,4 @@ Requires the following libraries:
 * WiFly: https://github.com/dpslwk/WiFly
 * MQTT: https://github.com/knolleary/pubsubclient
 * MemoryFree: https://github.com/maniacbug/MemoryFree
-* dht, inlcude in: https://github.com/RobTillaart/Arduino
+* dht, included in: https://github.com/RobTillaart/Arduino
