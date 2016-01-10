@@ -5,8 +5,8 @@ MQTT publisher to support sending sensor data from a The Airboard (http://theair
 Includes support for a DHT22 temperature/humidty sensor.
 
 Requires the following libraries:
-TheAirboard: https://github.com/theairboard/TheAirBoard
-WiFly: https://github.com/dpslwk/WiFly
-MQTT: https://github.com/knolleary/pubsubclient
-MemoryFree: https://github.com/maniacbug/MemoryFree
-dht, inlcude in: https://github.com/RobTillaart/Arduino
+* TheAirboard: https://github.com/theairboard/TheAirBoard
+* WiFly: https://github.com/dpslwk/WiFly
+* MQTT: https://github.com/knolleary/pubsubclient
+* MemoryFree: https://github.com/maniacbug/MemoryFree
+* dht, inlcude in: https://github.com/RobTillaart/Arduino
