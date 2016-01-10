@@ -4,6 +4,12 @@ MQTT publisher to support sending sensor data from [The AirBoard](http://theairb
 
 Includes support for a [DHT22](http://www.freetronics.com.au/collections/modules/products/humidity-and-temperature-sensor-module) temperature/humidty sensor.
 
+![DHT22 and The AirBoard](docs/DHT22-and-TheAirBoard.JPG)
+
+![DHT22 and WiFly](docs/DHT22-and-WiFly.JPG)
+
+(Sorry for poor quality of images!!)
+
 Requires the following libraries:
 * TheAirBoard: https://github.com/theairboard/TheAirBoard
 * WiFly: https://github.com/dpslwk/WiFly
