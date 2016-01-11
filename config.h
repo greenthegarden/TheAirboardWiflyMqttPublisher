@@ -25,6 +25,15 @@ char buf[12];
 #if ENABLE_THEAIRBOARD_SUPPORT
 #include <TheAirBoard.h>
 TheAirBoard board;
+volatile boolean f_wdt = true;
+unsigned int timeout = 0;
+
+// interrupt service routine: minimize time spent here
+ISR(WDT_vect) {
+  if(f_wdt == false)
+    f_wdt = true;
+}
+
 #endif
 #include <MemoryFree.h>
 
