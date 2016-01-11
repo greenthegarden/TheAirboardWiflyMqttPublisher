@@ -15,7 +15,9 @@ const byte FLOAT_DECIMAL_PLACES   = 1;
 const unsigned long MEASUREMENT_INTERVAL = 300000UL;    // 5 minutes = 5 * 60 * 1000 miliiseconds
 
 // global variable definitions
+#if !(ENABLE_THEAIRBOARD_SUPPORT)
 unsigned long previousMeasurementMillis = 0;
+#endif
 
 // character buffer to support conversion of floats to char
 char buf[12];
