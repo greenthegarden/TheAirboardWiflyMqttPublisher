@@ -1,0 +1,9 @@
+sitemap theairboard label="Airboard Measurements"
+{
+	Frame {
+		Group item=Sensors label="Sensors" icon="temperature"
+	}
+	Frame label="Date" {
+		Text item=Date
+	}
+}

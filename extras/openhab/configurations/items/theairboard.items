@@ -1,0 +1,11 @@
+Group    All
+Group    Indoors   (All)
+Group    Sensors 	(All)
+
+/* Sensor Measurements */
+Number   Temperature_AIRBOARD_DHT22 "Temperature [%.1f °C]"            <temperature> (Sensors) { mqtt="<[airology:/theairboard/measurement/DHT22_T:state:default]"}
+Number   Humidity_AIRBOARD_DHT22    "Humidity [%.1f %]"                <humidity>    (Sensors)    { mqtt="<[airology:/theairboard/measurement/DHT22_H:state:default]"}
+
+
+/* NTP binding demo item */
+DateTime Date			            "Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	                        { ntp="Australia/Adelaide:en_AU" }
