@@ -1,10 +1,14 @@
 Group    All
-Group    Indoors   (All)
 Group    Sensors 	(All)
 
 /* Sensor Measurements */
-Number   Temperature_AIRBOARD_DHT22 "Temperature [%.1f °C]"            <temperature> (Sensors) { mqtt="<[airology:/theairboard/measurement/DHT22_T:state:default]"}
-Number   Humidity_AIRBOARD_DHT22    "Humidity [%.1f %]"                <humidity>    (Sensors)    { mqtt="<[airology:/theairboard/measurement/DHT22_H:state:default]"}
+/* Number   Temperature_AIRBOARD_DHT22 "Temperature [%.1f °C]"            <temperature> (Sensors) { mqtt="<[airology:theairboard/measurement/DHT22_T:state:default]"} */
+/* Number   Humidity_AIRBOARD_DHT22    "Humidity [%.1f %%]"                <humidity>    (Sensors)    { mqtt="<[airology:theairboard/measurement/DHT22_H:state:default]"} */
+
+String AirboardMqttPublisher { mqtt="<[airology:home/sensor/theairboard:state:default]"}
+String AirboardMqttPublisherDhtt22Status "Status"            (Sensors)
+Number AirboardMqttPublisherDhtt22Temp "Temperature [%.1f °C]"            <temperature> (Sensors)
+Number AirboardMqttPublisherDhtt22Hum "Humidity [%.1f %%]"           <humidity> (Sensors)
 
 
 /* NTP binding demo item */

@@ -17,9 +17,13 @@ config['mqtt_configuration'] = mqtt_configuration
 config['mqtt_topics'] = {}
 # add additional topics to subscribe to here!!
 config['mqtt_topics']['TOPICS'] = [
+                                   'home/sensor/theairboard',
                                    'theairboard/status/#',
 								   'theairboard/request/#',
                                    'theairboard/measurement/#',
                                    ]
+
+config['PUBLISH_INTERVAL'] = 15.0
+
 
 config.write()

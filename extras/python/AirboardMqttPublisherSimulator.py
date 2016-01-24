@@ -88,20 +88,27 @@ import json
 
 def publish_measurements() :
 	try :
-		m = json.dumps({'status' : {'uptime' : time.time(), 'memory' : 234}, 'measurements' : [ {'status': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)}, {'status': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)}, {'status': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)}]})
+#		m = json.dumps({'status' : {'uptime' : time.time(), 'memory' : 234}, 'measurements' : [ {'status': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)}, {'status': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)}, {'status': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)}]})
+		m = json.dumps({'status' : {'uptime' : time.time(), 'memory' : 234}})
 		client.publish("home/sensor/theairboard", m)
-		# client.publish("theairboard/status/uptime", time.time())
+#		m = json.dumps({'measurement' : 'dht22', 'measurement': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)})
+		m = json.dumps({'measurement' : {'sensor' : 'dht22', 'status': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)}})
+		client.publish("home/sensor/theairboard", m)
+#		client.publish("theairboard/status/uptime", time.time())
 		# client.publish("theairboard/status/memory", 234)
 		# client.publish("theairboard/measurement/DHTT22_1", json.dumps({'status': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)}))
 		# client.publish("theairboard/measurement/DHTT22_2", json.dumps({'status': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)}))
 		# client.publish("theairboard/measurement/DHTT22_3", json.dumps({'status': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)}))
-		t = Timer(60.0, publish_measurements)
+#		client.publish("theairboard/measurement/DHT22_T", random.uniform(10.0, 30.0))
+#		client.publish("theairboard/measurement/DHT22_H", random.uniform(15.0, 80.0))
+
+		t = Timer(float(config['PUBLISH_INTERVAL']), publish_measurements)
 		t.start()
 	except KeyboardInterrupt :
 		tidyupAndExit()
 
 try :
-	t = Timer(60, publish_measurements)
+	t = Timer(float(config['PUBLISH_INTERVAL']), publish_measurements)
 	t.start()
 except KeyboardInterrupt :      #Triggered by pressing Ctrl+C
 	tidyupAndExit()
