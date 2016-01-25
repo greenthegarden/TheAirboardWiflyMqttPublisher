@@ -58,4 +58,6 @@
 		<appender-ref ref="STDOUT" />
 	</root>
 
+	<logger name="org.openhab.model.script.airboard" level="DEBUG"/>
+
 </configuration>

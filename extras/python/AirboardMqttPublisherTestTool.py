@@ -39,9 +39,13 @@ def on_message(client, userdata, message) :
 #    print("message received: topic is {0} with payload {1}".format(message.topic, message.payload))
 	if (message.topic == "home/sensor/theairboard") :
 		mess = json.loads(message.payload)
-		print("status: {0}".format(str(mess["status"])))
-		for measurement in mess["measurements"]	 :
-			print("measurement: {0}".format(str(measurement)))
+		print(mess)
+		if ('airboardstatus' in mess) :
+		 	print("uptime: {0}".format(str(mess['airboardstatus']["uptime"])))
+		 	print("memory: {0}".format(str(mess['airboardstatus']["memory"])))
+		elif ('measurements' in mess) :
+		 	for measurement in mess['measurements']	 :
+		 		print("measurement: {0}".format(str(measurement)))
 
 def on_publish(client, userdata, mid) :
     print("mid: {0}".format(str(mid)))

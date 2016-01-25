@@ -5,37 +5,69 @@ import org.openhab.model.script.actions.*
 /**
  * Example of parsing a JSON message received via MQTT
  * Source: https://github.com/openhab/openhab/wiki/JSON-Transformations
+ * also see
+ *     // following from https://github.com/openhab/openhab/wiki/Transformations
+ *     //var String json = '{"store":{"book":[{"category":"reference","author":"Nigel Rees","title": "Sayings of the Century", "price": 8.95  } ],  "bicycle": { "color": "red",  "price": 19.95} }}'
+ *     //var test = transform("JSONPATH","$.store.book[0].author",json)
+ *
  */
-rule "AirboardMqttPublisherParser"
-  when
-    Item AirboardMqttPublisher changed
-  then
-    var String json = (AirboardMqttPublisher.state as StringType).toString
-    // {'measurement' : {'sensor' : 'dht22', 'status': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)}})
-    // {"_type": "location", "lat": "47.5010314", "lon": "8.3444293",
-    //    "tst": "1422616466", "acc": "21.05", "batt": "40"}
-    // following from https://github.com/openhab/openhab/wiki/Transformations
-    //var String json = '{"store":{"book":[{"category":"reference","author":"Nigel Rees","title": "Sayings of the Century", "price": 8.95  } ],  "bicycle": { "color": "red",  "price": 19.95} }}'
-    //var test = transform("JSONPATH","$.store.book[0].author",json)
-    //println(test)
-//    var String measurement = transform("JSONPATH", "$.measurement", json)
-//    println(measurement)
-//    if (measurement != NULL && measurement.length() > 0)
-//    {
-      idx = 0
-      var String type = transform("JSONPATH", "$.measurements[idx].sensor", json)
-      println(sensor)
-      if (type == "dht22")
-      {
-        var String status  = transform("JSONPATH", "$.measurements[idx].status", json)
-        sendCommand(AirboardMqttPublisherDhtt22Status,  status)
-        if (status == "OK") {
-          var String temperature  = transform("JSONPATH", "$.measurements[idx].temperature", json)
-          var String humidity  = transform("JSONPATH", "$.measurements[idx].humidity", json)
 
-          sendCommand(AirboardMqttPublisherDhtt22Temp, temperature)
-          sendCommand(AirboardMqttPublisherDhtt22Hum,   humidity)
-        }
+val String mailTo = "greenthegarden@gmail.com"
+val Number lowBatteryThreshold = 4.0
+
+rule "AirboardBatteryMonitor"
+  when
+    Item AirboardMqttPublisherStatus changed
+  then
+    var String json = (AirboardMqttPublisherStatus.state as StringType).toString
+    logDebug("airboard", json)
+    var batteryVoltage = new Double (transform("JSONPATH", "$.voltage", json))
+//    logDebug("airboard", batteryVoltage)
+    if (batteryVoltage < lowBatteryThreshold) {
+      var String mess = "Airboard battery level: " + batteryVoltage + " volts"
+      logDebug("airboard", mess)
+/*      var String message = "Airboard battery levels:\n\n" + batteryVoltage + "\n\nRegards,\n\nopenHab"
+
+      sendMail(mailTo, "Low battery alert", message) */
+    }
+  end
+
+rule "AirboardSensor1"
+  when
+    Item AirboardMqttPublisherSensor1 changed
+  then
+    var String json = (AirboardMqttPublisherSensor1.state as StringType).toString
+    var String type = transform("JSONPATH", "$.sensor1.type", json)
+//    logDebug("airboard", type)
+    if (type == "dht22")
+    {
+      var String dht22status  = transform("JSONPATH", "$.sensor1.status", json)
+//      logDebug("airboard", dht22status)
+      if (dht22status == "OK") {
+        var String temperature  = transform("JSONPATH", "$.sensor1.temperature", json)
+        var String humidity  = transform("JSONPATH", "$.sensor1.humidity", json)
+        sendCommand(BedroomTemperature, temperature)
+        sendCommand(BedroomHumidity,   humidity)
       }
-//    }
+    }
+  end
+
+rule "AirboardSensor2"
+  when
+    Item AirboardMqttPublisherSensor2 changed
+  then
+    var String json = (AirboardMqttPublisherSensor2.state as StringType).toString
+    var String type = transform("JSONPATH", "$.sensor2.type", json)
+//    logDebug("airboard", type)
+    if (type == "dht22")
+    {
+      var String dht22status  = transform("JSONPATH", "$.sensor2.status", json)
+//      logDebug("airboard", dht22status)
+      if (dht22status == "OK") {
+        var String temperature  = transform("JSONPATH", "$.sensor2.temperature", json)
+        var String humidity  = transform("JSONPATH", "$.sensor2.humidity", json)
+        sendCommand(StudyTemperature, temperature)
+        sendCommand(StudyHumidity,   humidity)
+      }
+    }
   end

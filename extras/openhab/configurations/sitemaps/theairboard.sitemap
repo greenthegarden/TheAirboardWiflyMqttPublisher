@@ -2,6 +2,7 @@ sitemap theairboard label="Airboard Measurements"
 {
 	Frame label="Rooms" {
 		Group item=Bedroom label="Bedroom" icon="bedroom"
+		Group item=Study label="Study" icon="computer"
 	}
 	Frame label="Sensors" {
 		Group item=Sensors label="Sensors" icon="temperature"
