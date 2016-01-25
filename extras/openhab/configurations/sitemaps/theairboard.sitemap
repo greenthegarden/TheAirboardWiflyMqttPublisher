@@ -1,6 +1,9 @@
 sitemap theairboard label="Airboard Measurements"
 {
-	Frame {
+	Frame label="Rooms" {
+		Group item=Bedroom label="Bedroom" icon="bedroom"
+	}
+	Frame label="Sensors" {
 		Group item=Sensors label="Sensors" icon="temperature"
 	}
 	Frame label="Date" {

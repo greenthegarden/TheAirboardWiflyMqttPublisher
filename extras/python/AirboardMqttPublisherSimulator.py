@@ -89,11 +89,11 @@ import json
 def publish_measurements() :
 	try :
 #		m = json.dumps({'status' : {'uptime' : time.time(), 'memory' : 234}, 'measurements' : [ {'status': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)}, {'status': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)}, {'status': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)}]})
-		m = json.dumps({'status' : {'uptime' : time.time(), 'memory' : 234}})
+		m = json.dumps({'airboardstatus' : {'uptime' : time.time(), 'memory' : 234}})
 		client.publish("home/sensor/theairboard", m)
 #		m = json.dumps({'measurement' : 'dht22', 'measurement': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)})
-		m = json.dumps({'measurement' : {'sensor' : 'dht22', 'status': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)}})
-		client.publish("home/sensor/theairboard", m)
+#		m = json.dumps({'measurement' : {'sensor' : 'dht22', 'status': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)}})
+#		client.publish("home/sensor/theairboard", m)
 #		client.publish("theairboard/status/uptime", time.time())
 		# client.publish("theairboard/status/memory", 234)
 		# client.publish("theairboard/measurement/DHTT22_1", json.dumps({'status': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)}))
@@ -101,6 +101,16 @@ def publish_measurements() :
 		# client.publish("theairboard/measurement/DHTT22_3", json.dumps({'status': 'OK', 'temperature': random.uniform(20.0, 30.0), 'humidity': random.uniform(15.0, 50.0)}))
 #		client.publish("theairboard/measurement/DHT22_T", random.uniform(10.0, 30.0))
 #		client.publish("theairboard/measurement/DHT22_H", random.uniform(15.0, 80.0))
+
+		#{"store":{"book":[{"category":"reference","author":"Nigel Rees","title": "Sayings of the Century", "price": 8.95  } ],  "bicycle": { "color": "red",  "price": 19.95} }}
+		j_str = "{'measurements' : ["
+		for x in xrange(int(config['SENSORS'])) :
+			j_str += "{'sensor' : 'dht22', 'status': 'OK', 'temperature': " + str(random.uniform(20.0, 30.0)) + ", 'humidity': " + str(random.uniform(15.0, 50.0)) + "}"
+			if x != int(config['SENSORS'])-1 :
+				j_str += ", "
+		j_str += "]}"
+		m = json.dumps(j_str)
+		client.publish("home/sensor/theairboard", m)
 
 		t = Timer(float(config['PUBLISH_INTERVAL']), publish_measurements)
 		t.start()

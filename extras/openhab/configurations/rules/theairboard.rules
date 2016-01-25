@@ -22,15 +22,16 @@ rule "AirboardMqttPublisherParser"
 //    println(measurement)
 //    if (measurement != NULL && measurement.length() > 0)
 //    {
-      var String sensor = transform("JSONPATH", "$.measurement.sensor", json)
+      idx = 0
+      var String type = transform("JSONPATH", "$.measurements[idx].sensor", json)
       println(sensor)
-      if (sensor == "dht22")
+      if (type == "dht22")
       {
-        var String status  = transform("JSONPATH", "$.measurement.status", json)
+        var String status  = transform("JSONPATH", "$.measurements[idx].status", json)
         sendCommand(AirboardMqttPublisherDhtt22Status,  status)
         if (status == "OK") {
-          var String temperature  = transform("JSONPATH", "$.measurement.temperature", json)
-          var String humidity  = transform("JSONPATH", "$.measurement.humidity", json)
+          var String temperature  = transform("JSONPATH", "$.measurements[idx].temperature", json)
+          var String humidity  = transform("JSONPATH", "$.measurements[idx].humidity", json)
 
           sendCommand(AirboardMqttPublisherDhtt22Temp, temperature)
           sendCommand(AirboardMqttPublisherDhtt22Hum,   humidity)

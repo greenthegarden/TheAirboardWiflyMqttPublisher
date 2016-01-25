@@ -1,5 +1,7 @@
-Group    All
-Group    Sensors 	(All)
+Group   All
+Group   Sensors 	(All)
+Group   Bedroom (All)
+Group   Study (All)
 
 /* Sensor Measurements */
 /* Number   Temperature_AIRBOARD_DHT22 "Temperature [%.1f °C]"            <temperature> (Sensors) { mqtt="<[airology:theairboard/measurement/DHT22_T:state:default]"} */
@@ -7,8 +9,8 @@ Group    Sensors 	(All)
 
 String AirboardMqttPublisher { mqtt="<[airology:home/sensor/theairboard:state:default]"}
 String AirboardMqttPublisherDhtt22Status "Status"            (Sensors)
-Number AirboardMqttPublisherDhtt22Temp "Temperature [%.1f °C]"            <temperature> (Sensors)
-Number AirboardMqttPublisherDhtt22Hum "Humidity [%.1f %%]"           <humidity> (Sensors)
+Number AirboardMqttPublisherDhtt22Temp "Temperature [%.1f °C]"            <temperature> (Sensors, Bedroom)
+Number AirboardMqttPublisherDhtt22Hum "Humidity [%.1f %%]"           <humidity> (Sensors, Bedroom)
 
 
 /* NTP binding demo item */
