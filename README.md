@@ -16,3 +16,11 @@ Requires the following libraries:
 * MQTT: https://github.com/knolleary/pubsubclient
 * MemoryFree: https://github.com/maniacbug/MemoryFree
 * dht, included in: https://github.com/RobTillaart/Arduino
+
+Also include in the repository are [python scripts](extras/python) used to test the MQTT interface and an [OpenHAB](http://openhab.org) [configuration](extras/openhab) which provides an example of how the sensor data could be incorporated into a home automation environment.
+
+The following images show the OpenHAB GUI
+
+![OpenHAB main](docs/openhab-home.png)
+
+![OpenHAB sensors](docs/openhab-sensors.png)
