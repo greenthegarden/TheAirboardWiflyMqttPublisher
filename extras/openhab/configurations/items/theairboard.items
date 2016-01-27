@@ -2,6 +2,9 @@ Group   All
 Group   Sensors 	(All)
 Group   Bedroom (All)
 Group   Study (All)
+Group	Status (All)
+
+Group TemperatureChart
 
 /* Sensor Measurements */
 /* Number   Temperature_AIRBOARD_DHT22 "Temperature [%.1f °C]"            <temperature> (Sensors) { mqtt="<[airology:theairboard/measurement/DHT22_T:state:default]"} */
@@ -11,11 +14,12 @@ String AirboardMqttPublisherStatus {mqtt="<[airology:home/sensor/theairboard/sta
 String AirboardMqttPublisherSensor1 {mqtt="<[airology:home/sensor/theairboard/sensor1:state:default]"}
 String AirboardMqttPublisherSensor2 {mqtt="<[airology:home/sensor/theairboard/sensor2:state:default]"}
 
-Number BedroomTemperature "Temperature [%.1f °C]"            <temperature> (Sensors, Bedroom)
-Number BedroomHumidity "Humidity [%.1f %%]"           <humidity> (Sensors, Bedroom)
+Number BedroomTemperature "Bedroom Temperature [%.1f °C]"            <temperature> (Sensors, Bedroom, TemperatureChart, Temperature)
+Number StudyTemperature "Study Temperature [%.1f °C]"            <temperature> (Sensors, Study, TemperatureChart, Temperature)
+Group:Number:AVG Temperature	"Avg. Room Temperature [%.1f °C]" 	<temperature>	(Status)
 
-Number StudyTemperature "Temperature [%.1f °C]"            <temperature> (Sensors, Study)
-Number StudyHumidity "Humidity [%.1f %%]"           <humidity> (Sensors, Study)
+Number BedroomHumidity "Bedroom Humidity [%.1f %%]"           <humidity> (Sensors, Bedroom)
+Number StudyHumidity "Study Humidity [%.1f %%]"           <humidity> (Sensors, Study)
 
 /* NTP binding demo item */
 DateTime Date			            "Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	                        { ntp="Australia/Adelaide:en_AU" }

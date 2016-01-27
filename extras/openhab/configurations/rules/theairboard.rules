@@ -47,7 +47,7 @@ rule "AirboardSensor1"
         var String temperature  = transform("JSONPATH", "$.sensor1.temperature", json)
         var String humidity  = transform("JSONPATH", "$.sensor1.humidity", json)
         sendCommand(BedroomTemperature, temperature)
-        sendCommand(BedroomHumidity,   humidity)
+        sendCommand(BedroomHumidity, humidity)
       }
     }
   end
@@ -67,7 +67,7 @@ rule "AirboardSensor2"
         var String temperature  = transform("JSONPATH", "$.sensor2.temperature", json)
         var String humidity  = transform("JSONPATH", "$.sensor2.humidity", json)
         sendCommand(StudyTemperature, temperature)
-        sendCommand(StudyHumidity,   humidity)
+        sendCommand(StudyHumidity, humidity)
       }
     }
   end
