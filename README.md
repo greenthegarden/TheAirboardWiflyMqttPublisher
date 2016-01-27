@@ -23,6 +23,6 @@ The following images show the OpenHAB GUI
 
 ![OpenHAB main](docs/openhab-home.png)
 
-![OpenHAB sensors](docs/openhab-sensors.png)
+![OpenHAB sensors](docs/openhab-temperatures.png)
 
 ![OpenHAB airboardstatus](docs/openhab-airboardstatus.png)
