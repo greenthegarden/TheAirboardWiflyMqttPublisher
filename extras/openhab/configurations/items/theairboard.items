@@ -3,8 +3,10 @@ Group   Sensors 	(All)
 Group   Bedroom (All)
 Group   Study (All)
 Group	Status (All)
+Group   AirboardStatus (All)
 
 Group TemperatureChart
+Group BatteryLevelChart (AirboardStatus)
 
 /* Sensor Measurements */
 /* Number   Temperature_AIRBOARD_DHT22 "Temperature [%.1f °C]"            <temperature> (Sensors) { mqtt="<[airology:theairboard/measurement/DHT22_T:state:default]"} */
@@ -20,6 +22,8 @@ Group:Number:AVG Temperature	"Avg. Room Temperature [%.1f °C]" 	<temperature>	(
 
 Number BedroomHumidity "Bedroom Humidity [%.1f %%]"           <humidity> (Sensors, Bedroom)
 Number StudyHumidity "Study Humidity [%.1f %%]"           <humidity> (Sensors, Study)
+
+Number AirboardBatteryVoltage "Airboard Battery Level [%.1f volts]"  (AirboardStatus, BatteryLevelChart)
 
 /* NTP binding demo item */
 DateTime Date			            "Date [%1$tA, %1$td.%1$tm.%1$tY]"	<calendar>	                        { ntp="Australia/Adelaide:en_AU" }

@@ -12,7 +12,7 @@ import org.openhab.model.script.actions.*
  *
  */
 
-val String mailTo = "greenthegarden@gmail.com"
+//val String mailTo = "greenthegarden@gmail.com"
 val Number lowBatteryThreshold = 4.0
 
 rule "AirboardBatteryMonitor"
@@ -23,6 +23,7 @@ rule "AirboardBatteryMonitor"
     logDebug("airboard", json)
     var batteryVoltage = new Double (transform("JSONPATH", "$.voltage", json))
 //    logDebug("airboard", batteryVoltage)
+	sendCommand(AirboardBatteryVoltage, batteryVoltage)
     if (batteryVoltage < lowBatteryThreshold) {
       var String mess = "Airboard battery level: " + batteryVoltage + " volts"
       logDebug("airboard", mess)

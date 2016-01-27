@@ -8,5 +8,5 @@ Items {
 	//AirboardBattery : strategy = everyChange, everyMinute, restoreOnStartup
 
 	// let's only store temperature values in rrd
-	TemperatureChart* : strategy = everyMinute, restoreOnStartup
+	TemperatureChart*, BatteryLevelChart* : strategy = everyMinute, restoreOnStartup
 }
