@@ -6,10 +6,14 @@ sitemap theairboard label="Airboard Measurements"
 	}
 	Frame label="Sensors" {
 		Group item=Sensors label="Sensors" icon="temperature"
-		Frame {
+	}
+	Frame label="Temperatures" {
+//		Text label="Temperatures" icon="temperature"
+			Group item=Temperature 
 			//Webview url="http://localhost:8080/rrdchart.png?items=Temperature,&period=W"
-			Chart item=TemperatureChart period=D refresh=30000
-		}
+			}
+	Frame label="TemperatureChart" {
+		Chart item=TemperatureChart period=h refresh=6000
 	}
 	Frame label="Date" {
 		Text item=Date
