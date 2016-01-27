@@ -1,6 +1,8 @@
 sitemap theairboard label="Airboard Measurements"
 {
-	Text item=Date
+	Frame {
+		Text item=Date
+	}
 	Frame label="Rooms" {
 		Group item=Bedroom label="Bedroom" icon="bedroom"
 		Group item=Study label="Study" icon="computer"
@@ -17,13 +19,12 @@ sitemap theairboard label="Airboard Measurements"
 			Text item=BedroomTemperature
 			Text item=StudyTemperature
 			Text item=Temperature
+//			Switch item=Temperature_Chart_Period label="Chart Period" mappings=[0="Hour", 1="Day", 2="Week"]
+//			Chart item=TemperatureChart period=h refresh=300  visibility=[Temperature_Chart_Period==0, Temperature_Chart_Period=="Uninitialized"]  
+//			Chart item=TemperatureChart period=D refresh=1800 visibility=[Temperature_Chart_Period==1]  
+//			Chart item=TemperatureChart period=W refresh=3600 visibility=[Temperature_Chart_Period==2]
 			Chart item=TemperatureChart period=h refresh=6000
-		}
 			//Webview url="http://localhost:8080/rrdchart.png?items=Temperature,&period=W"
+		}
 	}
 }
-
-//Switch item=Temperature_Chart_Period label="Chart Period"mappings=[0="Hour", 1="Day", 2="Week"]  
-//Chart item=Temperature_Chart period=h refresh=300 visibility=[Temperature_Chart_Period==0, Temperature_Chart_Period=="Uninitialized"]  
-//Chart item=Temperature_Chart period=D refresh=1800 visibility=[Temperature_Chart_Period==1]  
-//Chart item=Temperature_Chart period=W refresh=3600visibility=[Temperature_Chart_Period==2]
