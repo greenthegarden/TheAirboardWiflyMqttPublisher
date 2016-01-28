@@ -6,6 +6,7 @@ Group	Status (All)
 Group   AirboardStatus (All)
 
 Group TemperatureChart
+Number TemperatureChartPeriod "Chart Period"
 Group BatteryLevelChart (AirboardStatus)
 
 /* Sensor Measurements */

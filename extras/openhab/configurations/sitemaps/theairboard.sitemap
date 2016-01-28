@@ -9,22 +9,26 @@ sitemap theairboard label="Airboard Measurements"
 	}
 	Frame label="Airboard Status" {
 		Text item=AirboardStatus {
-			Text item=AirboardBatteryVoltage
-			Chart item=BatteryLevelChart period=h refresh=6000
+			Text item=AirboardBatteryVoltage valuecolor=[>3.1="green",>2.7="yellow",<2.7="red"]
+			Chart item=BatteryLevelChart period=D refresh=60000
 //			Group item=Sensors label="Sensors" icon="temperature"
 		}
 	}
 	Frame label="Temperatures" {
 		Text item=Temperatures icon="temperature" {
-			Text item=BedroomTemperature
-			Text item=StudyTemperature
-			Text item=Temperature
-//			Switch item=Temperature_Chart_Period label="Chart Period" mappings=[0="Hour", 1="Day", 2="Week"]
-//			Chart item=TemperatureChart period=h refresh=300  visibility=[Temperature_Chart_Period==0, Temperature_Chart_Period=="Uninitialized"]  
-//			Chart item=TemperatureChart period=D refresh=1800 visibility=[Temperature_Chart_Period==1]  
-//			Chart item=TemperatureChart period=W refresh=3600 visibility=[Temperature_Chart_Period==2]
-			Chart item=TemperatureChart period=h refresh=6000
+			Frame {
+				Text item=BedroomTemperature valuecolor=[>25="red",>20="orange",>15="green",<15="blue"]
+				Text item=StudyTemperature valuecolor=[>25="red",>20="orange",>15="green",<15="blue"]
+				Text item=Temperature valuecolor=[>25="red",>20="orange",>15="green",<15="blue"]
+			}
+			Frame {
+				Switch item=TemperatureChartPeriod label="Chart Period" mappings=[0="Hour", 1="Day", 2="Week"]
+				Chart item=TemperatureChart period=h refresh=6000  visibility=[TemperatureChartPeriod==0, TemperatureChartPeriod=="Uninitialized"]  
+				Chart item=TemperatureChart period=D refresh=30000 visibility=[TemperatureChartPeriod==1]  
+				Chart item=TemperatureChart period=W refresh=30000 visibility=[TemperatureChartPeriod==2]
+//			Chart item=TemperatureChart period=h refresh=60000
 			//Webview url="http://localhost:8080/rrdchart.png?items=Temperature,&period=W"
+			}
 		}
 	}
 }
