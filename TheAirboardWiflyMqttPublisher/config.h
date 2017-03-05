@@ -45,7 +45,7 @@ ISR(WDT_vect) {
 
 // Define sensors
 #ifndef ENABLE_SENSOR_DHT22
-#define ENABLE_SENSOR_DHT22 true
+#define ENABLE_SENSOR_DHT22 false
 #endif
 #include "sensorsConfig.h"
 
