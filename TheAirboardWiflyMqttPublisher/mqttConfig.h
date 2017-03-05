@@ -5,14 +5,13 @@
 
 
 // MQTT parameters
-IPAddress mqttServerAddr(192, 168, 1, 50); // emonPi
+IPAddress mqttServerAddr(192, 168, 1, 52); // emonPi
 char mqttClientId[] = "theairboard";
 const int MQTT_PORT = 1883;
 
 const byte BUFFER_SIZE            = 32;
 char topicBuffer[BUFFER_SIZE];
 char payloadBuffer[BUFFER_SIZE];
-//char message[BUFFER_SIZE];
 
 // callback definition for MQTT
 void callback(char* topic,
@@ -103,6 +102,23 @@ typedef enum {
 } measurement_topics_idx;
 
 
+byte mqtt_connect() {
+  if (!wiflyConnectedToNetwork)
+    wifly_connect();
+
+  if (wiflyConnectedToNetwork) {
+    DEBUG_LOG(1, "connecting to broker");
+    if (mqttClient.connect(mqttClientId)) {
+      DEBUG_LOG(1, "  connected");
+      return true;
+    } else {
+      DEBUG_LOG(1, "  failed");
+      delay(AFTER_ERROR_DELAY);
+    }
+  }
+  return false;
+}
+
 void publish_connected() {
   topicBuffer[0] = '\0';
   strcpy_P(topicBuffer,
@@ -113,27 +129,14 @@ void publish_connected() {
   mqttClient.publish(topicBuffer, payloadBuffer);
 }
 
-#if ENABLE_VERSION
-void publish_version() {
-  topicBuffer[0] = '\0';
-  strcpy_P(topicBuffer,
-           (char *)pgm_read_word(&(STATUS_TOPICS[VERSION_STATUS_IDX])));
-  payloadBuffer[0] = '\0';
-  sprintf(payloadBuffer, "%s", VERSION);
-  mqttClient.publish(topicBuffer, payloadBuffer);
-}
-#endif
-
-#if 0
 void publish_status_interval() {
   topicBuffer[0] = '\0';
   strcpy_P(topicBuffer,
            (char *)pgm_read_word(&(STATUS_TOPICS[INTERVAL_STATUS_IDX])));
   payloadBuffer[0] = '\0';
   mqttClient.publish(topicBuffer,
-                     ltoa(STATUS_UPDATE_INTERVAL, payloadBuffer, 10));
+                     ltoa(PUBLISH_INTERVAL, payloadBuffer, 10));
 }
-#endif
 
 #if 0
 void publish_ip_address() {
@@ -141,7 +144,7 @@ void publish_ip_address() {
   strcpy_P(topicBuffer,
            (char *)pgm_read_word(&(STATUS_TOPICS[IP_ADDR_STATUS_IDX])));
   payloadBuffer[0] = '\0';
-  IPAddress ip = WiFly.ip();
+  char ip[16] = WiFly.ip();
   sprintf(payloadBuffer, "%i%c%i%c%i%c%i", ip[0], '.', ip[1], '.', ip[2], '.',
           ip[3]);
   mqttClient.publish(topicBuffer, payloadBuffer);
@@ -166,19 +169,8 @@ void publish_memory() {
 }
 #endif
 
-void publish_configuration() {
-#if ENABLE_VERSION
-  publish_version();
-#endif
-#if 0
-  publish_status_interval();
-  publish_ip_address();
-#endif
-}
-
 #if ENABLE_THEAIRBOARD_SUPPORT
-void publish_battery()
-{
+void publish_battery() {
   topicBuffer[0] = '\0';
   strcpy_P(topicBuffer, (char*)pgm_read_word(&(STATUS_TOPICS[BATTERY_STATUS_IDX])));
   payloadBuffer[0] = '\0';
@@ -187,36 +179,18 @@ void publish_battery()
 }
 #endif
 
-void publish_status()
-{
-  publish_connected();
-  publish_uptime();
+void publish_status() {
+  if(mqtt_connect()) {
+    publish_connected();
+    publish_uptime();
 #if USE_MEMORY_FREE
-  publish_memory();
+    publish_memory();
 #endif
 #if ENABLE_THEAIRBOARD_SUPPORT
-  publish_battery();
+    publish_battery();
 #endif
-}
-
-
-byte mqtt_connect()
-{
-  if (!wiflyConnectedToNetwork)
-    wifly_connect();
-
-  if (wiflyConnectedToNetwork) {
-    DEBUG_LOG(1, "connecting to broker");
-    if (mqttClient.connect(mqttClientId)) {
-      DEBUG_LOG(1, "  connected");
-      publish_status();
-      return true;
-    } else {
-      DEBUG_LOG(1, "  failed");
-      delay(AFTER_ERROR_DELAY);
-    }
+  mqttClient.disconnect();
   }
-  return false;
 }
 
 #endif  /* THEAIRBOARDWIFLYMQTTPUBLISHER_MQTT_CONFIG_H_ */

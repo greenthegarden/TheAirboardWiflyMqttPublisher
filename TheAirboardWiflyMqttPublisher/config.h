@@ -5,25 +5,28 @@
 #ifndef ENABLE_THEAIRBOARD_SUPPORT
 #define ENABLE_THEAIRBOARD_SUPPORT  true
 #endif
+#ifndef ENABLE_THEAIRBOARD_SLEEP
+#define ENABLE_THEAIRBOARD_SLEEP  false
+#endif
+
 
 #include "debug.h"
 
 
-// GLobal Constants
+// Global Constants
 const int AFTER_ERROR_DELAY       = 1000;
 const int BAUD_RATE               = 9600;
 const byte FLOAT_DECIMAL_PLACES   = 1;
-const unsigned long MEASUREMENT_INTERVAL = 300000UL;    // 5 minutes = 5 * 60 * 1000 miliiseconds
+const unsigned long PUBLISH_INTERVAL = 1UL * 60UL * 1000UL;    // x minutes = x * 60 * 1000 milliseconds
 
 // global variable definitions
-#if !(ENABLE_THEAIRBOARD_SUPPORT)
 unsigned long previousMeasurementMillis = 0;
-#endif
 
 // External libraries
 #if ENABLE_THEAIRBOARD_SUPPORT
 #include <TheAirBoard.h>
 TheAirBoard board;
+#if ENABLE_THEAIRBOARD_SLEEP
 volatile boolean f_wdt = true;
 unsigned int timeout = 0;
 
@@ -32,6 +35,7 @@ ISR(WDT_vect) {
   if(f_wdt == false)
     f_wdt = true;
 }
+#endif
 
 #endif
 #include <MemoryFree.h>

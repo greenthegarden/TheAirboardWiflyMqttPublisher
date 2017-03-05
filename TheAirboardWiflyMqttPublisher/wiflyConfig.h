@@ -46,11 +46,11 @@ WiFlyClient    wiflyClient;
 
 #if ENABLE_THEAIRBOARD_SUPPORT
 
-#define RX 0                      // digital I/O pin for the TheAirboard UART serial receive
-#define TX 1                      // digital I/O pin for the TheAirboard UART serial receive port
+//#define RX 0                      // digital I/O pin for the TheAirboard UART serial receive
+//#define TX 1                      // digital I/O pin for the TheAirboard UART serial receive port
 
-const byte UART_RX        = RX;   // TheAirboard UART serial receive (RX) port connected to TX of WiFly
-const byte UART_TX        = TX;   // TheAirboard UART serial transmit (TX) port connected to TX of WiFly
+//const byte UART_RX        = RX;   // TheAirboard UART serial receive (RX) port connected to RX of WiFly
+//const byte UART_TX        = TX;   // TheAirboard UART serial transmit (TX) port connected to TX of WiFly
 
 void wifly_configure() {
   WiFly.setUart(&Serial);
