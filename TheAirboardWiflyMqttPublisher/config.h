@@ -2,10 +2,11 @@
 #define THEAIRBOARDWIFLYMQTTPUBLISHER_CONFIG_H_
 
 
+#ifndef ENABLE_THEAIRBOARD_SUPPORT
 #define ENABLE_THEAIRBOARD_SUPPORT  true
+#endif
 
-
-#include "Debug.h"
+#include "debug.h"
 
 
 // GLobal Constants
@@ -18,10 +19,6 @@ const unsigned long MEASUREMENT_INTERVAL = 300000UL;    // 5 minutes = 5 * 60 * 
 #if !(ENABLE_THEAIRBOARD_SUPPORT)
 unsigned long previousMeasurementMillis = 0;
 #endif
-
-// character buffer to support conversion of floats to char
-char buf[12];
-
 
 // External libraries
 #if ENABLE_THEAIRBOARD_SUPPORT
@@ -42,14 +39,15 @@ ISR(WDT_vect) {
 
 // Internal headers
 #include "networkConfig.h"  // Network configuration
-#include "wifly_config.h"   // WiFly configuration
-#include "mqtt_config.h"    // MQTT configuration
+#include "wiflyConfig.h"   // WiFly configuration
+#include "mqttConfig.h"    // MQTT configuration
 
 
 // Define sensors
+#ifndef ENABLE_SENSOR_DHT22
 #define ENABLE_SENSOR_DHT22 true
-#include "sensors_config.h"
+#endif
+#include "sensorsConfig.h"
 
 
 #endif  /* THEAIRBOARDWIFLYMQTTPUBLISHER_CONFIG_H_ */
-
