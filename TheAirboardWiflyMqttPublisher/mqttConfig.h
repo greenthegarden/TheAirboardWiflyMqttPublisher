@@ -6,7 +6,7 @@
 
 // MQTT parameters
 IPAddress mqttServerAddr(192, 168, 1, 52); // emonPi
-const char * MQTT_CLIENT_ID = "relayshield";
+const char * MQTT_CLIENT_ID = "theairboard";
 const char * MQTT_USERNAME = "emonpi";
 const char * MQTT_PASSWORD = "emonpimqtt2016";
 const int MQTT_PORT = 1883;
