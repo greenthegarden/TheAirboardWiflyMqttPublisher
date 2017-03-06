@@ -6,7 +6,9 @@
 
 // MQTT parameters
 IPAddress mqttServerAddr(192, 168, 1, 52); // emonPi
-char mqttClientId[] = "theairboard";
+const char * MQTT_CLIENT_ID = "relayshield";
+const char * MQTT_USERNAME = "emonpi";
+const char * MQTT_PASSWORD = "emonpimqtt2016";
 const int MQTT_PORT = 1883;
 
 const byte BUFFER_SIZE            = 32;
@@ -60,6 +62,8 @@ const char IP_ADDR_STATUS[] PROGMEM = "theairboard/status/ip_addr";
 const char UPTIME_STATUS[] PROGMEM = "theairboard/status/uptime";
 const char MEMORY_STATUS[] PROGMEM = "theairboard/status/memory";
 const char BATTERY_STATUS[] PROGMEM = "theairboard/status/battery";
+const char LED_COLOUR_STATUS[] PROGMEM = "theairboard/status/led_colour";
+const char TEMPERATURE_STATUS[] PROGMEM = "theairboard/status/temperature";
 const char REPORT_STATUS[] PROGMEM = "theairboard/status/report";
 const char DHT22_STATUS[] PROGMEM = "theairboard/status/dht22";
 
@@ -71,8 +75,10 @@ PGM_P const STATUS_TOPICS[] PROGMEM = {
     UPTIME_STATUS,         // idx = 4
     MEMORY_STATUS, // idx = 5
     BATTERY_STATUS,          // idx = 6
-    REPORT_STATUS,        // idx = 7
-    DHT22_STATUS,       // idx = 8
+    LED_COLOUR_STATUS,   // idx = 7
+    TEMPERATURE_STATUS, // idx = 8
+    REPORT_STATUS,        // idx = 9
+    DHT22_STATUS,       // idx = 10
 };
 
 typedef enum {
@@ -83,8 +89,10 @@ typedef enum {
   UPTIME_STATUS_IDX = 4,
   MEMORY_STATUS_IDX = 5,
   BATTERY_STATUS_IDX = 6,
-  REPORT_STATUS_IDX = 7,
-  DHT22_STATUS_IDX = 8,
+  LED_COLOUR_STATUS_IDX = 7,
+  TEMPERATURE_STATUS_IDX = 8,
+  REPORT_STATUS_IDX = 9,
+  DHT22_STATUS_IDX = 10,
 } status_topics;
 
 // measurement topics
@@ -108,7 +116,8 @@ byte mqtt_connect() {
 
   if (wiflyConnectedToNetwork) {
     DEBUG_LOG(1, "connecting to broker");
-    if (mqttClient.connect(mqttClientId)) {
+//    if (mqttClient.connect(MQTT_CLIENT_ID)) {
+    if (mqttClient.connect(MQTT_CLIENT_ID, MQTT_USERNAME, MQTT_PASSWORD)) {
       DEBUG_LOG(1, "  connected");
       return true;
     } else {
@@ -177,6 +186,21 @@ void publish_battery() {
   dtostrf(board.batteryChk(), 1, FLOAT_DECIMAL_PLACES, payloadBuffer);
   mqttClient.publish(topicBuffer, payloadBuffer);
 }
+
+void publish_led_colour(byte colour_idx) {
+  topicBuffer[0] = '\0';
+  strcpy_P(topicBuffer, (char*)pgm_read_word(&(STATUS_TOPICS[LED_COLOUR_STATUS_IDX])));
+  payloadBuffer[0] = '\0';
+  mqttClient.publish(topicBuffer, itoa(colour_idx, payloadBuffer, 10));
+}
+
+void publish_temperature() {
+  topicBuffer[0] = '\0';
+  strcpy_P(topicBuffer, (char*)pgm_read_word(&(STATUS_TOPICS[TEMPERATURE_STATUS_IDX])));
+  payloadBuffer[0] = '\0';
+  dtostrf(board.getTemp(), 1, FLOAT_DECIMAL_PLACES, payloadBuffer);
+  mqttClient.publish(topicBuffer, payloadBuffer);
+}
 #endif
 
 void publish_status() {
@@ -188,6 +212,7 @@ void publish_status() {
 #endif
 #if ENABLE_THEAIRBOARD_SUPPORT
     publish_battery();
+    publish_temperature();
 #endif
   mqttClient.disconnect();
   }
