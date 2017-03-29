@@ -9,14 +9,10 @@
   --------------------------------------------------------------------------------------*/
 void setup()
 {
-#if (ENABLE_THEAIRBOARD_SUPPORT && ENABLE_THEAIRBOARD_SLEEP)
-  pinMode(RF, OUTPUT);
-  digitalWrite(RF, 1);          // turn on wireless module
-#endif
-  Serial.begin(BAUD_RATE);
+  theairboard_init();
   wifly_configure();
-  publish_status();
-#if (ENABLE_THEAIRBOARD_SUPPORT && ENABLE_THEAIRBOARD_SLEEP)
+  mqtt_connect();
+#if ENABLE_THEAIRBOARD_SLEEP
   delay(5000);                  // allow time to launch programming, before a possible wireless module power down
   board.setWatchdog(8000);      // set watchdog timeout in milliseconds (max 8000)
 #endif
@@ -29,7 +25,9 @@ void setup()
   --------------------------------------------------------------------------------------*/
 void loop()
 {
-#if (ENABLE_THEAIRBOARD_SUPPORT && ENABLE_THEAIRBOARD_SLEEP)
+  unsigned long now = millis();
+
+#if ENABLE_THEAIRBOARD_SLEEP
   if(f_wdt == true) {            // on watchdog expire (every 8 seconds)
     timeout++;
     if(timeout == 10) {           // timeout every 10*8 = 80 seconds
@@ -46,14 +44,13 @@ void loop()
     board.powerDown();           // goto deep sleep
   }
 #else
-  unsigned long currentMillis = millis();
 
-  if (currentMillis - previousMeasurementMillis >= PUBLISH_INTERVAL) {
-    previousMeasurementMillis = currentMillis;
-    publish_status();
-#if ENABLE_SENSOR_DHT22
-    publish_measurements();
-#endif
+  if (now - statusPreviousMillis >= STATUS_UPDATE_INTERVAL) {
+    if (mqttClient.connected()) {
+      statusPreviousMillis = now;
+      publish_status();
+    }
   }
+
 #endif
 }

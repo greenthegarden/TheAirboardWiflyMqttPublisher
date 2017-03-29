@@ -10,10 +10,10 @@ Upload your first sketch in seconds from https://codebender.cc?referral_code=Ub5
 Check README.txt and license.txt for more information.
 All text above must be included in any redistribution.
 *******************************************************************************/
-
+ 
 #ifndef TheAirBoard_h
 #define TheAirBoard_h
-
+ 
 #include <Arduino.h>
 #include <avr/sleep.h>
 #include <avr/power.h>
@@ -44,7 +44,7 @@ All text above must be included in any redistribution.
 class TheAirBoard
 {
   public:
-  TheAirBoard(void);
+    TheAirBoard(void);
 	void powerDown();
 	void setWatchdog(int period);
 	float batteryChk(void);
