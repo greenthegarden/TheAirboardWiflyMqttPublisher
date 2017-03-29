@@ -164,9 +164,9 @@ boolean mqtt_connect() {
       publish_configuration();
       publish_status();
     }
-    return mqttClient.connected();
+    mqttClient.disconnect();
   }
-  return false;
+  return mqttClient.connected();
 }
 
 #endif  /* THEAIRBOARDWIFLYMQTTPUBLISHER_MQTT_CONFIG_H_ */

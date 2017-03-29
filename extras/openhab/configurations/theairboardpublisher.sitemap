@@ -1,0 +1,20 @@
+sitemap theairboard label="TheAirboard"
+{
+	Frame label="Status" {
+		Switch item=TheAirboardState
+		Text item=TheAirboardLastStatusUpdate icon="calendar"
+		Text item=TheAirboardUptime icon="clock"
+		Text item=TheAirboardTemperature icon="temperature" valuecolor=[>30="red",>20="yellow",<20="green"]
+		Switch item=TheAirboardTemperatureChartPeriod label="Chart Period" mappings=[0="Hour", 1="Day", 2="Week"]
+		Chart item=TheAirboardTemperature period=h refresh=6000  visibility=[TheAirboardTemperatureChartPeriod==0, TheAirboardTemperatureChartPeriod=="Uninitialized"]  
+		Chart item=TheAirboardTemperature period=D refresh=30000 visibility=[TheAirboardTemperatureChartPeriod==1]  
+		Chart item=TheAirboardTemperature period=W refresh=30000 visibility=[TheAirboardTemperatureChartPeriod==2]
+		Text item=TheAirboardBattery icon="battery" valuecolor=[>3.1="green",>2.7="yellow",<2.7="red"]
+		Chart item=TheAirboardBattery service="rrd4j" period=D refresh=6000
+	}
+	Frame label="Configuration" {
+		Text item=TheAirboardLastConnected icon="calendar"
+		Text item=TheAirboardStatusInterval icon="clock"
+		Text item=TheAirboardIpAddress icon="network"
+	}
+}

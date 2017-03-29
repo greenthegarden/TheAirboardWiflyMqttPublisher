@@ -48,7 +48,7 @@ void loop()
   if (now - statusPreviousMillis >= STATUS_UPDATE_INTERVAL) {
     if (mqttClient.connected()) {
       statusPreviousMillis = now;
-      publish_status();
+      mqtt_connect();
     }
   }
 

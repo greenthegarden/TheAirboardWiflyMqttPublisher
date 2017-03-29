@@ -7,6 +7,10 @@
 
 TheAirBoard board;
 
+#ifndef ENABLE_THEAIRBOARD_SLEEP
+#define ENABLE_THEAIRBOARD_SLEEP 0
+#endif
+
 
 #if ENABLE_THEAIRBOARD_SLEEP
 volatile boolean f_wdt = true;
