@@ -14,7 +14,7 @@ const int MQTT_PORT = 1883;
 unsigned long lastReconnectAttempt = 0UL;
 const unsigned long RECONNECTION_ATTEMPT_INTERVAL = 5000UL;
 
-const byte BUFFER_SIZE            = 32;
+const byte BUFFER_SIZE            = 48;
 char topicBuffer[BUFFER_SIZE];
 char payloadBuffer[BUFFER_SIZE];
 

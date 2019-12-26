@@ -22,12 +22,16 @@ void publish_status()
   publish_uptime();
   publish_theairboard_battery();
   publish_theairboard_temperature();
-  publish_dht22_temperature_measurement();
-  publish_dht22_humidity_measurement();
 }
 
+void mqtt_publish()
+{
+  // publish_configuration();
+  publish_status();
+  // publish_dht22_measurements();
+}
 
-boolean mqtt_connect()
+boolean mqtt_connect_and_publish()
 {
   if (!wiflyConnectedToNetwork)
     wifly_connect();
@@ -40,10 +44,12 @@ boolean mqtt_connect()
       publish_connected();
       publish_configuration();
       publish_status();
+      publish_dht22_measurements();
     }
     mqttClient.disconnect();
+    return true;
   }
-  return mqttClient.connected();
+  return false;
 }
 
 /*--------------------------------------------------------------------------------------
@@ -54,7 +60,7 @@ void setup()
 {
   theairboard_init();
   wifly_configure();
-  mqtt_connect();
+  mqtt_connect_and_publish();
 #if ENABLE_THEAIRBOARD_SLEEP
   delay(5000);                  // allow time to launch programming, before a possible wireless module power down
   board.setWatchdog(8000);      // set watchdog timeout in milliseconds (max 8000)
@@ -89,10 +95,10 @@ void loop()
 #else
 
   if (now - statusPreviousMillis >= STATUS_UPDATE_INTERVAL) {
-    if (mqttClient.connected()) {
+    // if (mqttClient.connected()) {
       statusPreviousMillis = now;
-      mqtt_connect();
-    }
+      mqtt_connect_and_publish();
+    // }
   }
 
 #endif
