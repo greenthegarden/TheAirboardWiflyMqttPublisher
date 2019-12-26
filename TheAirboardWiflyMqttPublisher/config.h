@@ -21,6 +21,7 @@ unsigned long statusPreviousMillis = 0UL;
 #include "wiflyConfig.h"   // WiFly configuration
 #include "mqttConfig.h"    // MQTT configuration
 #include "theairboardConfig.h"
+#include "dht22Config.h"
 
 
 #endif  /* THEAIRBOARDWIFLYMQTTPUBLISHER_CONFIG_H_ */

@@ -95,6 +95,23 @@ typedef enum {
   REPORT_STATUS_IDX = 9,
 } status_topics;
 
+// measurement topics
+const char MEASUREMENT_DHT22_STATUS[] PROGMEM = "theairboard/measurement/dht22/status";
+const char MEASUREMENT_DHT22_TEMPERATURE[] PROGMEM = "theairboard/measurement/dht22/temperature";
+const char MEASUREMENT_DHT22_HUMIDITY[] PROGMEM = "theairboard/measurement/dht22/humidity";
+
+PGM_P const MEASUREMENT_TOPICS[] PROGMEM = {
+    MEASUREMENT_DHT22_STATUS,      // idx = 0
+    MEASUREMENT_DHT22_TEMPERATURE, // idx = 1
+    MEASUREMENT_DHT22_HUMIDITY,    // idx = 2
+};
+
+typedef enum
+{
+  MEASUREMENT_DHT22_STATUS_IDX = 0,
+  MEASUREMENT_DHT22_TEMPERATURE_IDX = 1,
+  MEASUREMENT_DHT22_HUMIDITY_IDX = 2,
+} measurement_topics;
 
 void publish_connected() {
   topicBuffer[0] = '\0';
@@ -134,41 +151,6 @@ void publish_uptime() {
            (char *)pgm_read_word(&(STATUS_TOPICS[UPTIME_STATUS_IDX])));
   payloadBuffer[0] = '\0';
   mqttClient.publish(topicBuffer, ltoa(millis(), payloadBuffer, 10));
-}
-
-void publish_battery();
-void publish_led_colour(byte colour_idx);
-void publish_temperature();
-
-void publish_configuration() {
-  publish_status_interval();
-#if 0
-  publish_ip_address();
-#endif
-}
-
-void publish_status()
-{
-  publish_uptime();
-  publish_battery();
-  publish_temperature();
-}
-
-boolean mqtt_connect() {
-  if (!wiflyConnectedToNetwork)
-    wifly_connect();
-
-  if (wiflyConnectedToNetwork) {
-    // if (mqttClient.connect(MQTT_CLIENT_ID, MQTT_USERNAME, MQTT_PASSWORD)) {
-    if (mqttClient.connect(MQTT_CLIENT_ID))
-    {
-      publish_connected();
-      publish_configuration();
-      publish_status();
-    }
-    mqttClient.disconnect();
-  }
-  return mqttClient.connected();
 }
 
 #endif  /* THEAIRBOARDWIFLYMQTTPUBLISHER_MQTT_CONFIG_H_ */

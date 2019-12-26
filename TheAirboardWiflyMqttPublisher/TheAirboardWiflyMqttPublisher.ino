@@ -2,6 +2,49 @@
 
 #include "config.h"
 
+/*--------------------------------------------------------------------------------------
+  helper functions
+  --------------------------------------------------------------------------------------*/
+// void publish_theairboard_battery();
+// void publish_theairboard_led_colour(byte colour_idx);
+// void publish_theairboard_temperature();
+
+void publish_configuration()
+{
+  publish_status_interval();
+#if 0
+  publish_ip_address();
+#endif
+}
+
+void publish_status()
+{
+  publish_uptime();
+  publish_theairboard_battery();
+  publish_theairboard_temperature();
+  publish_dht22_temperature();
+  publish_dht22_humidity();
+}
+
+
+boolean mqtt_connect()
+{
+  if (!wiflyConnectedToNetwork)
+    wifly_connect();
+
+  if (wiflyConnectedToNetwork)
+  {
+    // if (mqttClient.connect(MQTT_CLIENT_ID, MQTT_USERNAME, MQTT_PASSWORD)) {
+    if (mqttClient.connect(MQTT_CLIENT_ID))
+    {
+      publish_connected();
+      publish_configuration();
+      publish_status();
+    }
+    mqttClient.disconnect();
+  }
+  return mqttClient.connected();
+}
 
 /*--------------------------------------------------------------------------------------
   setup()
