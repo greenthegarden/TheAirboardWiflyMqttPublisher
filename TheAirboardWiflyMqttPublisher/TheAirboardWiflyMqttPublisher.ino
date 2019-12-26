@@ -22,8 +22,8 @@ void publish_status()
   publish_uptime();
   publish_theairboard_battery();
   publish_theairboard_temperature();
-  publish_dht22_temperature();
-  publish_dht22_humidity();
+  publish_dht22_temperature_measurement();
+  publish_dht22_humidity_measurement();
 }
 
 

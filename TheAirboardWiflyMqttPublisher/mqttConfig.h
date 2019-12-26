@@ -70,19 +70,20 @@ const char TEMPERATURE_STATUS[] PROGMEM = "theairboard/status/temperature";
 const char REPORT_STATUS[] PROGMEM = "theairboard/status/report";
 
 PGM_P const STATUS_TOPICS[] PROGMEM = {
-    MQTT_STATUS,          // idx = 0
-    VERSION_STATUS,        // idx = 1
-    INTERVAL_STATUS,         // idx = 2
-    IP_ADDR_STATUS,         // idx = 3
-    UPTIME_STATUS,         // idx = 4
-    MEMORY_STATUS, // idx = 5
-    BATTERY_STATUS,          // idx = 6
-    LED_COLOUR_STATUS,   // idx = 7
+    MQTT_STATUS,        // idx = 0
+    VERSION_STATUS,     // idx = 1
+    INTERVAL_STATUS,    // idx = 2
+    IP_ADDR_STATUS,     // idx = 3
+    UPTIME_STATUS,      // idx = 4
+    MEMORY_STATUS,      // idx = 5
+    BATTERY_STATUS,     // idx = 6
+    LED_COLOUR_STATUS,  // idx = 7
     TEMPERATURE_STATUS, // idx = 8
-    REPORT_STATUS,        // idx = 9
+    REPORT_STATUS,      // idx = 9
 };
 
-typedef enum {
+typedef enum
+{
   MQTT_STATUS_IDX = 0,
   VERSION_STATUS_IDX = 1,
   INTERVAL_STATUS_IDX = 2,
