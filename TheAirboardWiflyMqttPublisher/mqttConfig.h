@@ -5,7 +5,7 @@
 #include <PubSubClient.h>
 
 // MQTT parameters
-IPAddress mqttServerAddr(192, 168, 1, 52); // emonPi
+IPAddress mqttServerAddr(192, 168, 1, 54); // openhabian
 const char * MQTT_CLIENT_ID = "theairboard";
 const char * MQTT_USERNAME = "emonpi";
 const char * MQTT_PASSWORD = "emonpimqtt2016";
@@ -159,7 +159,9 @@ boolean mqtt_connect() {
     wifly_connect();
 
   if (wiflyConnectedToNetwork) {
-    if (mqttClient.connect(MQTT_CLIENT_ID, MQTT_USERNAME, MQTT_PASSWORD)) {
+    // if (mqttClient.connect(MQTT_CLIENT_ID, MQTT_USERNAME, MQTT_PASSWORD)) {
+    if (mqttClient.connect(MQTT_CLIENT_ID))
+    {
       publish_connected();
       publish_configuration();
       publish_status();
