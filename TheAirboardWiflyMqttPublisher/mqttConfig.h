@@ -58,16 +58,16 @@ typedef enum {
 } mqtt_payloads;
 
 // status topics
-const char MQTT_STATUS[] PROGMEM = "theairboard/status/mqtt";
-const char VERSION_STATUS[] PROGMEM = "theairboard/status/version";
-const char INTERVAL_STATUS[] PROGMEM = "theairboard/status/interval";
-const char IP_ADDR_STATUS[] PROGMEM = "theairboard/status/ip_addr";
-const char UPTIME_STATUS[] PROGMEM = "theairboard/status/uptime";
-const char MEMORY_STATUS[] PROGMEM = "theairboard/status/memory";
-const char BATTERY_STATUS[] PROGMEM = "theairboard/status/battery";
-const char LED_COLOUR_STATUS[] PROGMEM = "theairboard/status/led_colour";
-const char TEMPERATURE_STATUS[] PROGMEM = "theairboard/status/temperature";
-const char REPORT_STATUS[] PROGMEM = "theairboard/status/report";
+const char MQTT_STATUS[] PROGMEM = "theairboard/1/status/mqtt";
+const char VERSION_STATUS[] PROGMEM = "theairboard/1/status/version";
+const char INTERVAL_STATUS[] PROGMEM = "theairboard/1/status/interval";
+const char IP_ADDR_STATUS[] PROGMEM = "theairboard/1/status/ip_addr";
+const char UPTIME_STATUS[] PROGMEM = "theairboard/1/status/uptime";
+const char MEMORY_STATUS[] PROGMEM = "theairboard/1/status/memory";
+const char BATTERY_STATUS[] PROGMEM = "theairboard/1/status/battery";
+const char LED_COLOUR_STATUS[] PROGMEM = "theairboard/1/status/led_colour";
+const char TEMPERATURE_STATUS[] PROGMEM = "theairboard/1/status/temperature";
+const char REPORT_STATUS[] PROGMEM = "theairboard/1/status/report";
 
 PGM_P const STATUS_TOPICS[] PROGMEM = {
     MQTT_STATUS,        // idx = 0
@@ -97,9 +97,9 @@ typedef enum
 } status_topics;
 
 // measurement topics
-const char MEASUREMENT_DHT22_STATUS[] PROGMEM = "theairboard/measurement/dht22/status";
-const char MEASUREMENT_DHT22_TEMPERATURE[] PROGMEM = "theairboard/measurement/dht22/temperature";
-const char MEASUREMENT_DHT22_HUMIDITY[] PROGMEM = "theairboard/measurement/dht22/humidity";
+const char MEASUREMENT_DHT22_STATUS[] PROGMEM = "theairboard/1/measurement/dht22/status";
+const char MEASUREMENT_DHT22_TEMPERATURE[] PROGMEM = "theairboard/1/measurement/dht22/temperature";
+const char MEASUREMENT_DHT22_HUMIDITY[] PROGMEM = "theairboard/1/measurement/dht22/humidity";
 
 PGM_P const MEASUREMENT_TOPICS[] PROGMEM = {
     MEASUREMENT_DHT22_STATUS,      // idx = 0
