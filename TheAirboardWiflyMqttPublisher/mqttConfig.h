@@ -5,10 +5,10 @@
 #include <PubSubClient.h>
 
 // MQTT parameters
-IPAddress mqttServerAddr(192, 168, 1, 54); // openhabian
+IPAddress mqttServerAddr(192, 168, 1, 186); // home-assistant
 const char * MQTT_CLIENT_ID = "theairboard";
-const char * MQTT_USERNAME = "emonpi";
-const char * MQTT_PASSWORD = "emonpimqtt2016";
+// const char * MQTT_USERNAME = "emonpi";
+// const char * MQTT_PASSWORD = "emonpimqtt2016";
 const int MQTT_PORT = 1883;
 
 unsigned long lastReconnectAttempt = 0UL;
@@ -111,8 +111,7 @@ void publish_status_interval() {
   strcpy_P(topicBuffer,
            (char *)pgm_read_word(&(STATUS_TOPICS[INTERVAL_STATUS_IDX])));
   payloadBuffer[0] = '\0';
-  mqttClient.publish(topicBuffer,
-                     ltoa(STATUS_UPDATE_INTERVAL, payloadBuffer, 10));
+  mqttClient.publish(topicBuffer, ltoa(STATUS_UPDATE_INTERVAL, payloadBuffer, 10));
 }
 
 #if 0
